@@ -3,29 +3,23 @@ import PropTypes from 'prop-types';
 import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 
 const GoogleMap = (props) => {
-  const { lat, lng } = props;
-  const position = { lat, lng };
+  const { location } = props;
 
   return (
     <Map
+      // eslint-disable-next-line react/prop-types
       google={props.google}
       zoom={14}
-      center={position}
-      initialCenter={position}
+      center={location}
+      initialCenter={location}
     >
-      <Marker title={'検索結果'} position={position} />
+      <Marker title={'検索結果'} position={location} />
     </Map>
   );
 };
 
 GoogleMap.propTypes = {
-  lat: PropTypes.number,
-  lng: PropTypes.number,
-};
-
-GoogleMap.defaultProps = {
-  lat: 35.6585805,
-  lng: 139.7454329,
+  location: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 
 export default GoogleApiWrapper({

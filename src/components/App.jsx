@@ -43,11 +43,13 @@ class App extends Component {
     const location = this.state.location;
 
     return (
-      <div>
-        <h1>緯度経度検索</h1>
+      <div className="app">
+        <h1 className="app-title">ホテル検索</h1>
         <SearchForm onSubmit={(place) => this.handlePlaceSubmit(place)} />
-        <GeocodeResult address={this.state.address} location={location} />
-        <GoogleMap location={location} />
+        <div className="result-area">
+          <GoogleMap location={location} />
+          <GeocodeResult address={this.state.address} location={location} />
+        </div>
       </div>
     );
   }

@@ -4,17 +4,29 @@ import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 
 const GoogleMap = (props) => {
   const { location } = props;
+  const containerStyle = {
+    position: 'relative',
+  };
+  const mapStyle = {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+  };
 
   return (
-    <Map
-      // eslint-disable-next-line react/prop-types
-      google={props.google}
-      zoom={14}
-      center={location}
-      initialCenter={location}
-    >
-      <Marker title={'検索結果'} position={location} />
-    </Map>
+    <div className="google-map">
+      <Map
+        // eslint-disable-next-line react/prop-types
+        google={props.google}
+        zoom={14}
+        center={location}
+        initialCenter={location}
+        containerStyle={containerStyle}
+        style={mapStyle}
+      >
+        <Marker title={'検索結果'} position={location} />
+      </Map>
+    </div>
   );
 };
 

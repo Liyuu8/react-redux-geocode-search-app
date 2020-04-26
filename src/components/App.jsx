@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
@@ -8,6 +9,9 @@ import HotelsTable from './HotelsTable';
 import { geocode } from '../domain/Geocoder';
 import { searchHotelByLocation } from '../domain/HotelRepository';
 
+const sortedHotels = (hotels, sortKey) =>
+  _.sortBy(hotels, (hotel) => hotel[sortKey]);
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +20,7 @@ class App extends Component {
         lat: 35.6585805,
         lng: 139.7454329,
       },
+      sortKey: 'price',
     };
   }
 
@@ -43,11 +48,18 @@ class App extends Component {
         return [];
       })
       .then((hotels) => {
-        this.setState({ hotels });
+        this.setState({ hotels: sortedHotels(hotels, this.state.sortKey) });
       })
       .catch(() => {
         this.setErrorMessage('No Signal.');
       });
+  }
+
+  handleSortKeyChange(sortKey) {
+    this.setState({
+      sortKey,
+      hotels: sortedHotels(this.state.hotels, sortKey),
+    });
   }
 
   render() {
@@ -62,7 +74,11 @@ class App extends Component {
           <div className="result-right">
             <GeocodeResult address={this.state.address} location={location} />
             <h2>ホテル検索結果</h2>
-            <HotelsTable hotels={this.state.hotels} />
+            <HotelsTable
+              hotels={this.state.hotels}
+              sortKey={this.state.sortKey}
+              onSort={(sortKey) => this.handleSortKeyChange(sortKey)}
+            />
           </div>
         </div>
       </div>

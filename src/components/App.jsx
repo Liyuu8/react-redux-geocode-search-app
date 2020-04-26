@@ -3,13 +3,23 @@ import React, { Component } from 'react';
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
 import GoogleMap from './GoogleMap';
+import HotelsTable from './HotelsTable';
 
 import { geocode } from '../domain/Geocoder';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { location: { lat: 35.6585805, lng: 139.7454329 } };
+    this.state = {
+      location: {
+        lat: 35.6585805,
+        lng: 139.7454329,
+      },
+      hotels: [
+        { id: 111, name: 'ホテルオークラ', url: 'https://google.com' },
+        { id: 222, name: 'アパホテル', url: 'https://yahoo.co.jp' },
+      ],
+    };
   }
 
   setErrorMessage(message) {
@@ -48,7 +58,11 @@ class App extends Component {
         <SearchForm onSubmit={(place) => this.handlePlaceSubmit(place)} />
         <div className="result-area">
           <GoogleMap location={location} />
-          <GeocodeResult address={this.state.address} location={location} />
+          <div className="result-right">
+            <GeocodeResult address={this.state.address} location={location} />
+            <h2>ホテル検索結果</h2>
+            <HotelsTable hotels={this.state.hotels} />
+          </div>
         </div>
       </div>
     );

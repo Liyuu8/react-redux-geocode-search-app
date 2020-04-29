@@ -15,7 +15,7 @@ export const geocode = (place) =>
       const status = results.data.status;
       const result = results.data.results[0];
 
-      if (typeof status === 'undefined') {
+      if (status === 'ZERO_RESULTS') {
         return { status };
       }
 

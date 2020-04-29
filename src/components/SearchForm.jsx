@@ -1,14 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { setPlace, startSearch } from '../actions';
 
 const SearchForm = (props) => (
-  <form className="search-form" onSubmit={(e) => props.onSubmit(e)}>
+  <form
+    className="search-form"
+    onSubmit={(e) => {
+      e.preventDefault();
+      props.startSearch();
+    }}
+  >
     <input
       className="place-input"
       type="text"
       size="30"
       value={props.place}
-      onChange={(e) => props.onPlaceChange(e.target.value)}
+      onChange={(e) => {
+        e.preventDefault();
+        props.setPlace(e.target.value);
+      }}
     />
     <input className="submit-button" type="submit" value="検索" />
   </form>
@@ -16,8 +28,16 @@ const SearchForm = (props) => (
 
 SearchForm.propTypes = {
   place: PropTypes.string.isRequired,
-  onPlaceChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  setPlace: PropTypes.func.isRequired,
+  startSearch: PropTypes.func.isRequired,
 };
 
-export default SearchForm;
+const mapStateToProps = (state) => ({
+  place: state.place,
+});
+
+const ConnectedSearchForm = connect(mapStateToProps, { setPlace, startSearch })(
+  SearchForm
+);
+
+export default ConnectedSearchForm;

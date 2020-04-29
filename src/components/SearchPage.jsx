@@ -1,52 +1,39 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import queryString from 'query-string';
 
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
 import GoogleMap from './GoogleMap';
 import HotelsTable from './HotelsTable';
+import { startSearch } from '../actions/';
 
-class SearchPage extends Component {
-  getPlaceParam() {
-    const params = queryString.parse(this.props.location.search);
-    const place = params.place;
-    if (place && place.length > 0) {
-      return place;
-    }
-    return null;
-  }
+const SearchPage = (props) => {
+  useEffect(() => {
+    props.dispatch(startSearch());
+  }, []);
 
-  // handlePlaceSubmit(e) {
-  //   e.preventDefault();
-  //   this.props.history.push(`/?place=${this.state.place}`);
-  //   this.startSearch();
-  // }
-
-  render() {
-    return (
-      <div className="search-page">
-        <h1 className="app-title">ホテル検索</h1>
-        <SearchForm />
-        <div className="result-area">
-          <GoogleMap location={this.props.geocodeResult.location} />
-          <div className="result-right">
-            <GeocodeResult
-              address={this.props.geocodeResult.address}
-              location={this.props.geocodeResult.location}
-            />
-            <h2>ホテル検索結果</h2>
-            <HotelsTable />
-          </div>
+  return (
+    <div className="search-page">
+      <h1 className="app-title">ホテル検索</h1>
+      <SearchForm history={props.history} />
+      <div className="result-area">
+        <GoogleMap location={props.geocodeResult.location} />
+        <div className="result-right">
+          <GeocodeResult
+            address={props.geocodeResult.address}
+            location={props.geocodeResult.location}
+          />
+          <h2>ホテル検索結果</h2>
+          <HotelsTable />
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 SearchPage.propTypes = {
-  // history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   location: PropTypes.shape({ search: PropTypes.string }).isRequired,
   geocodeResult: PropTypes.shape({
     address: PropTypes.string.isRequired,
@@ -55,6 +42,7 @@ SearchPage.propTypes = {
       lng: PropTypes.number.isRequired,
     }),
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
